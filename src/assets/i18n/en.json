@@ -1,0 +1,28 @@
+{
+  "404": "Page Not Found",
+  "search": "Search",
+  "auth": {
+    "SIGN_UP": "Sign Up",
+    "SIGN_IN": "Sign In",
+    "SIGN_OUT": "Sign Out",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "REPEATE_PASSWORD": "Repeate Password"
+  },
+  "error": {
+    "EMAIL": "Email is required",
+    "PASSWORD": "Password is required",
+    "PASSWORD_REPEAT": "Repeate Password is required",
+    "EMAIL_VALID": "Email must be a valid email address",
+    "PASSWORD_LENGTH": "Password must be at least 6 characters",
+    "PASSWORD_MATCH": "Passwords must match"
+  },
+  "team": {
+    "FOUNDED": "Founded",
+    "COUNTRY": "Country",
+    "CITY": "City",
+    "STADIUM": "Stadium",
+    "CAPACITY": "Capacity",
+    "TEAM_NAME": "Team Name"
+  }
+}

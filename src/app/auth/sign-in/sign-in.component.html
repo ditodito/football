@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center my-5">
+  <form class="col-md-6 col-lg-4" (ngSubmit)="onSignIn(form)" #form="ngForm">
+    <h1 class="h4 mb-3 text-center fw-normal">{{ 'auth.SIGN_IN' | translate}}</h1>
+
+    <div class="form-floating mb-2">
+      <input
+        type="email"
+        class="form-control shadow-none"
+        [class.border-danger]="form.submitted && email.invalid"
+        name="email"
+        id="email"
+        placeholder="email@example.com"
+        required email
+        [(ngModel)]="singIn.email"
+        #email="ngModel"
+      />
+      <label for="email">{{ 'auth.EMAIL' | translate}}</label>
+      <ng-container *ngIf="form.submitted && email.invalid">
+        <div class="alert alert-danger" role="alert"
+          *ngIf="email.errors?.['required']">{{ 'error.EMAIL' | translate}}</div>
+        <div class="alert alert-danger" role="alert"
+          *ngIf="email.errors?.['email']">{{ 'error.EMAIL_VALID' | translate}}</div>
+      </ng-container>
+    </div>
+
+    <div class="form-floating mb-2">
+      <input
+        type="password"
+        class="form-control shadow-none"
+        [class.border-danger]="form.submitted && password.invalid"
+        name="password"
+        id="password"
+        placeholder="Password"
+        required minlength="6"
+        [(ngModel)]="singIn.password"
+        #password="ngModel"
+      />
+      <label for="password">{{ 'auth.PASSWORD' | translate}}</label>
+      <ng-container *ngIf="form.submitted && password.invalid">
+        <div class="alert alert-danger" role="alert"
+          *ngIf="password.errors?.['required']">{{ 'error.PASSWORD' | translate}}</div>
+        <div class="alert alert-danger" role="alert"
+          *ngIf="password.errors?.['minlength']">{{ 'error.PASSWORD_LENGTH' | translate}}</div>
+      </ng-container>
+    </div>
+
+    <button type="submit" class="w-100 btn btn-primary">
+      <i class="bi bi-box-arrow-right"></i>
+      {{ 'auth.SIGN_IN' | translate}}
+    </button>
+  </form>
+</div>

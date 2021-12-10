@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-fac46": {
+      "hosting": {
+        "IMDB": [
+          "angular-fac46"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-fac46"
+  }
+}
