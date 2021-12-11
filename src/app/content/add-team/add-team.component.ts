@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Country } from '../models';
 import { Team } from '../models/team.models';
@@ -23,11 +23,15 @@ export class AddTeamComponent implements OnInit {
     return this.facade.searchedTeams;
   };
 
-  constructor(private facade: AddTeamFacade) {}
+  get players() {
+    return this.form.get('players') as FormArray;
+  }
+
+  constructor(private facade: AddTeamFacade, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.facade.restoreState();
-    this.form.addControl('test', new FormControl('dd'))
+    this.buildForm();
   }
 
   onSearch() {
@@ -48,5 +52,47 @@ export class AddTeamComponent implements OnInit {
 
   getPopulation({name, population}: Country) {
     return `Population of ${name} is ${population}`;
+  }
+
+  submit() {
+    console.log(this.form.valid);
+    console.log(this.form.invalid);
+    console.log(this.form);
+
+    //this.form.controls['test'].setValue('dito');
+    /*this.form.setValue({
+      test: 'test 1987'
+    })*/
+  }
+
+  private buildForm() {
+    this.form = this.fb.group({
+      website: ['', [Validators.required]],
+      wikipedia: ['', [Validators.required]],
+      coach: ['', [Validators.required]],
+      players: this.fb.array([
+        /*this.fb.group({
+          position: ['deffender',  [Validators.required]],
+          name: ['Gerard Pique',  [Validators.required]]
+        }),
+        this.fb.group({
+          position: ['forward',  [Validators.required]],
+          name: ['Ansu Fati',  [Validators.required]]
+        })*/
+      ])
+    });
+  }
+
+  addPlayerControl() {
+    this.players.push(
+      this.fb.group({
+        position: ['', [Validators.required]],
+        name: ['', [Validators.required]]
+      })
+    );
+  }
+
+  removePlayerControl(index: number) {
+    this.players.removeAt(index);
   }
 }

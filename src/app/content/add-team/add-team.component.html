@@ -7,15 +7,10 @@
       name="search"
       id="search"
       placeholder="{{ 'team.TEAM_NAME' | translate }}"
-      [(ngModel)]="search"
-      />
+      [(ngModel)]="search" />
 
-    <button
-      type="submit"
-      class="w-100 btn btn-primary mb-2"
-      (click)="onSearch()"
-    >
-      {{ "search" | translate }}
+    <button type="submit" class="w-100 btn btn-primary mb-2" (click)="onSearch()">
+      <i class="bi bi-search"></i> {{ "search" | translate }}
     </button>
 
     <div class="text-center">
@@ -27,7 +22,7 @@
 </div>
 
 <div class="container" *ngIf="selectedTeam$ | async as team">
-  <div class="row">
+  <div class="row mb-5">
     <div class="col-sm-3 mb-2">
       <img
         class="img-fluid img-thumbnail"
@@ -65,11 +60,66 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="team">
-    <div class="col">
-      <form [formGroup]="form">
-          <input formCotrol="test" />
-      </form>
+  <form [formGroup]="form" (submit)="submit()" *ngIf="team">
+    <div class="row mb-3">
+      <label for="website" class="col-sm-2 col-form-label">
+        {{ "team.WEBSITE" | translate }}:
+      </label>
+      <div class="col-sm-4 col-md-3">
+        <input type="text" class="form-control" id="website" formControlName="website" />
+      </div>
     </div>
-  </div>
+    <div class="row mb-3">
+      <label for="wikipedia" class="col-sm-2 col-form-label">
+        {{ "team.WIKIPEDIA" | translate }}:
+      </label>
+      <div class="col-sm-4 col-md-3">
+        <input type="text" class="form-control" id="wikipedia" formControlName="wikipedia" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="coach" class="col-sm-2 col-form-label">
+        {{ "team.COACH" | translate }}:
+      </label>
+      <div class="col-sm-4 col-md-3">
+        <input type="text" class="form-control" id="coach" formControlName="coach" />
+      </div>
+    </div>
+
+    <fieldset class="row mb-3" formArrayName="players">
+      <legend class="col-form-label col-sm-2 pt-0">
+        {{ "team.PLAYERS" | translate }}
+
+        <button class="btn btn-success" (click)="addPlayerControl()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </legend>
+
+      <div class="col-sm-10">
+        <div class="row mb-3" [formGroupName]="i" *ngFor="let player of players.controls; let i=index">
+          <div class="col-sm-4 col-md-3">
+            <input type="text" class="form-control" formControlName="position" />
+          </div>
+          <div class="col-sm-4 col-md-3">
+            <input type="text" class="form-control" formControlName="name" />
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-danger" (click)="removePlayerControl(i)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+
+
+
+    <button type="submit" class="btn btn-primary">{{ "team.ADD" | translate }}</button>
+
+    <div>
+      {{form.value | json}}
+    </div>
+
+  </form>
 </div>
