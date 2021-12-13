@@ -1,4 +1,4 @@
-import { Country } from ".";
+import { Country } from '.';
 
 export interface TeamApi {
   response: TeamApiResponse[];
@@ -27,7 +27,7 @@ export interface TeamApiResponse {
 export interface Team {
   id: number;
   name: string;
-  countryName: string,
+  countryName: string;
   cityName: string;
   country: Country;
   founded: number;
@@ -37,4 +37,17 @@ export interface Team {
     capacity: number;
     imageUrl: string;
   };
+}
+
+export interface TeamBody {
+  teamId: number;
+  uid: string | null | undefined;
+  website: string;
+  rating: number;
+  isUCLWinner: boolean;
+  coach: string;
+  players?: {
+    position: string;
+    name: string;
+  }[];
 }

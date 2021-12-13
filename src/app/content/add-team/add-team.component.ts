@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/services';
+import { POSITION, PositionSelect, RATINGS } from '../content.models';
 import { Country } from '../models';
-import { Team } from '../models/team.models';
+import { Team, TeamBody } from '../models/team.models';
 import { AddTeamFacade } from './add-team.facade';
 import { AddTeamStorage } from './add-team.storage';
 
@@ -13,21 +16,36 @@ import { AddTeamStorage } from './add-team.storage';
   providers: [AddTeamFacade, AddTeamStorage],
 })
 export class AddTeamComponent implements OnInit {
-  form: FormGroup = new FormGroup({});
+  searchKey: string = '';
+  searchHasError: boolean = false;
 
-  search: string = '';
   selectedTeam$: Observable<Team> | null = null;
-  searchError: boolean = false;
+
+  form: FormGroup = new FormGroup({});
+  submitted: boolean = false;
 
   get searchedTeams(): string[] {
     return this.facade.searchedTeams;
-  };
+  }
 
   get players() {
     return this.form.get('players') as FormArray;
   }
 
-  constructor(private facade: AddTeamFacade, private fb: FormBuilder) {}
+  get ratings(): number[] {
+    return RATINGS;
+  }
+
+  get positions(): PositionSelect[] {
+    return POSITION;
+  }
+
+  constructor(
+    private facade: AddTeamFacade,
+    private fb: FormBuilder,
+    private translate: TranslateService,
+    private auth: AuthService,
+  ) {}
 
   ngOnInit() {
     this.facade.restoreState();
@@ -35,40 +53,56 @@ export class AddTeamComponent implements OnInit {
   }
 
   onSearch() {
-    this.searchError = false;
-
-    if (!this.search) {
-      this.searchError = false;
+    if (!this.searchKey) {
+      this.searchHasError = true;
       return;
     }
 
-    this.facade.addToLastSearches(this.search);
-    this.fetchTeam(this.search)
+    this.searchHasError = false;
+    this.facade.addToLastSearches(this.searchKey);
+    this.fetchTeam(this.searchKey);
   }
 
   fetchTeam(team: string) {
     this.selectedTeam$ = this.facade.getTeamByName(team);
   }
 
-  getPopulation({name, population}: Country) {
-    return `Population of ${name} is ${population}`;
+  getPopulation({ name, population }: Country) {
+    return this.translate.get('population', {
+      country: name,
+      population: population,
+    });
   }
 
-  submit() {
-    console.log(this.form.valid);
-    console.log(this.form.invalid);
-    console.log(this.form);
+  submit(selectedTeam: Team) {
+    this.submitted = true;
 
-    //this.form.controls['test'].setValue('dito');
-    /*this.form.setValue({
-      test: 'test 1987'
-    })*/
+    if (this.form.invalid) {
+      return;
+    }
+
+    const value = this.form.value;
+
+    const teamBody: TeamBody = {
+      teamId: selectedTeam.id,
+      uid: this.auth.userId,
+      website: value.website,
+      rating: value.rating,
+      isUCLWinner: value.isUCLWinner,
+      coach: value.coach,
+      players: value.players
+    }
+
+    console.log(teamBody);
+
+    this.facade.submit(teamBody);
   }
 
   private buildForm() {
     this.form = this.fb.group({
       website: ['', [Validators.required]],
-      wikipedia: ['', [Validators.required]],
+      rating: 1,
+      isUCLWinner: false,
       coach: ['', [Validators.required]],
       players: this.fb.array([
         /*this.fb.group({
@@ -79,7 +113,7 @@ export class AddTeamComponent implements OnInit {
           position: ['forward',  [Validators.required]],
           name: ['Ansu Fati',  [Validators.required]]
         })*/
-      ])
+      ]),
     });
   }
 
@@ -87,12 +121,16 @@ export class AddTeamComponent implements OnInit {
     this.players.push(
       this.fb.group({
         position: ['', [Validators.required]],
-        name: ['', [Validators.required]]
+        name: ['', [Validators.required]],
       })
     );
   }
 
   removePlayerControl(index: number) {
     this.players.removeAt(index);
+  }
+
+  getFormArrayElementValidity(index: number, controlName: string) {
+    return this.players.controls[index].get(controlName)?.invalid;
   }
 }

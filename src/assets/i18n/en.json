@@ -1,6 +1,6 @@
 {
   "404": "Page Not Found",
-  "search": "Search",
+  "population": "Population of {{country}} is {{population}}",
   "auth": {
     "SIGN_UP": "Sign Up",
     "SIGN_IN": "Sign In",
@@ -23,6 +23,21 @@
     "CITY": "City",
     "STADIUM": "Stadium",
     "CAPACITY": "Capacity",
-    "TEAM_NAME": "Team Name"
+    "TEAM_NAME": "Team Name",
+    "WEBSITE": "Web Site",
+    "RATING": "Rating",
+    "IS_UCL_WINNER": "Is UCL Winner",
+    "COACH": "Coach",
+    "PLAYERS": "Players",
+    "ADD_PLAYER": "Add Player"
+  },
+  "catalogue": {
+    "SELECT": "Select",
+    "SEARCH": "Search",
+    "ADD": "ADD",
+    "GK": "Goalkeeper",
+    "DF": "Defender",
+    "MF": "Midfielder",
+    "FW": "Forward"
   }
 }

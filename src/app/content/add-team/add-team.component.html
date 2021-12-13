@@ -3,14 +3,14 @@
     <input
       type="text"
       class="form-control shadow-none mb-2"
-      [class.border-danger]="searchError"
+      [class.border-danger]="searchHasError"
       name="search"
       id="search"
       placeholder="{{ 'team.TEAM_NAME' | translate }}"
-      [(ngModel)]="search" />
+      [(ngModel)]="searchKey" />
 
     <button type="submit" class="w-100 btn btn-primary mb-2" (click)="onSearch()">
-      <i class="bi bi-search"></i> {{ "search" | translate }}
+      <i class="bi bi-search"></i> {{ "catalogue.SEARCH" | translate }}
     </button>
 
     <div class="text-center">
@@ -42,8 +42,8 @@
         >:
         <img
           [src]="team.country.flagUrl"
-          [alt]="getPopulation(team.country)"
-          [title]="getPopulation(team.country)"
+          [alt]="(getPopulation(team.country) | async)"
+          [title]="(getPopulation(team.country) | async)"
           width="28"
           height="21" />
         {{ team.countryName }}
@@ -60,66 +60,106 @@
     </div>
   </div>
 
-  <form [formGroup]="form" (submit)="submit()" *ngIf="team">
+  <form [formGroup]="form" (submit)="submit(team)" *ngIf="team">
     <div class="row mb-3">
-      <label for="website" class="col-sm-2 col-form-label">
+      <label for="website" class="col-sm-3 col-form-label">
         {{ "team.WEBSITE" | translate }}:
       </label>
       <div class="col-sm-4 col-md-3">
-        <input type="text" class="form-control" id="website" formControlName="website" />
+        <input
+          type="text"
+          class="form-control shadow-none"
+          [class.border-danger]="submitted && form.controls['website']?.invalid"
+          id="website"
+          formControlName="website" />
       </div>
     </div>
     <div class="row mb-3">
-      <label for="wikipedia" class="col-sm-2 col-form-label">
-        {{ "team.WIKIPEDIA" | translate }}:
+      <label for="rating" class="col-sm-3 col-form-label">
+        {{ "team.RATING" | translate }}:
       </label>
       <div class="col-sm-4 col-md-3">
-        <input type="text" class="form-control" id="wikipedia" formControlName="wikipedia" />
+        <span class="me-2" *ngFor="let rating of ratings">
+          <input type="radio" class="form-check-input" [value]="rating" formControlName="rating" />
+        </span>
       </div>
     </div>
     <div class="row mb-3">
-      <label for="coach" class="col-sm-2 col-form-label">
+      <label for="wikipedia" class="col-sm-3 col-form-label">
+        {{ "team.IS_UCL_WINNER" | translate }}:
+      </label>
+      <div class="col-sm-4 col-md-3">
+        <input type="checkbox" class="form-check-input" formControlName="isUCLWinner" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="coach" class="col-sm-3 col-form-label">
         {{ "team.COACH" | translate }}:
       </label>
       <div class="col-sm-4 col-md-3">
-        <input type="text" class="form-control" id="coach" formControlName="coach" />
+        <input
+          type="text"
+          class="form-control"
+          [class.border-danger]="submitted  && form.controls['coach']?.invalid"
+          id="coach"
+          formControlName="coach" />
       </div>
     </div>
 
     <fieldset class="row mb-3" formArrayName="players">
-      <legend class="col-form-label col-sm-2 pt-0">
+      <legend class="col-form-label col-sm-3 pt-0">
         {{ "team.PLAYERS" | translate }}
-
-        <button class="btn btn-success" (click)="addPlayerControl()">
-          <i class="bi bi-plus"></i>
-        </button>
       </legend>
 
-      <div class="col-sm-10">
+      <div class="col-sm-9">
         <div class="row mb-3" [formGroupName]="i" *ngFor="let player of players.controls; let i=index">
-          <div class="col-sm-4 col-md-3">
-            <input type="text" class="form-control" formControlName="position" />
+          <div class="col-sm-4 col-md-4">
+            <select
+              class="form-select"
+              [class.border-danger]="submitted && getFormArrayElementValidity(i, 'position')"
+              formControlName="position">
+              <option [value]="''">
+                --- {{ "catalogue.SELECT" | translate }} ---
+              </option>
+              <option *ngFor="let position of positions" [value]="position.value">
+                {{ position.label | translate }}
+              </option>
+            </select>
           </div>
-          <div class="col-sm-4 col-md-3">
-            <input type="text" class="form-control" formControlName="name" />
+          <div class="col-sm-4 col-md-4">
+            <input type="text"
+              class="form-control"
+              [class.border-danger]="submitted && getFormArrayElementValidity(i, 'name')"
+              formControlName="name" />
           </div>
           <div class="col-sm-1">
             <button class="btn btn-danger" (click)="removePlayerControl(i)">
               <i class="bi bi-trash"></i>
             </button>
           </div>
+      </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <button type="button" class="btn btn-link" (click)="addPlayerControl()">
+              + {{ "team.ADD_PLAYER" | translate }}
+            </button>
+          </div>
         </div>
       </div>
     </fieldset>
 
+    <div class="row">
+      <div class="col-sm-4 col-md-4 offset-sm-3">
+        <button type="submit" class="btn btn-primary">
+          {{ "catalogue.ADD" | translate }}
+        </button>
+      </div>
+    </div>
 
-
-
-    <button type="submit" class="btn btn-primary">{{ "team.ADD" | translate }}</button>
 
     <div>
       {{form.value | json}}
     </div>
-
   </form>
 </div>

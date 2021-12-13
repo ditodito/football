@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { finalize, map, Observable, switchMap, tap } from 'rxjs';
 import { LoadingService } from 'src/app/services';
-import { CountryApi, TeamApiResponse, Team, TeamApi } from '../models';
+import { FireApiService } from 'src/app/services/fire-api.service';
+import { CountryApi, TeamApiResponse, Team, TeamApi, TeamBody } from '../models';
 import { TeamApiService, CountryApiService } from '../services';
 import { AddTeamStorage } from './add-team.storage';
 
@@ -14,6 +15,7 @@ export class AddTeamFacade {
   constructor(
     private teamApiService: TeamApiService,
     private countryApiService: CountryApiService,
+    private fireApiService: FireApiService,
     private loaderService: LoadingService,
     private addTeamStorage: AddTeamStorage,
   ) {}
@@ -72,5 +74,9 @@ export class AddTeamFacade {
 
   restoreState(): void {
     this.addTeamStorage.restoreState();
+  }
+
+  submit(teamBody: TeamBody): void {
+    this.fireApiService.addTeam(teamBody).subscribe(data => console.log(data));
   }
 }
