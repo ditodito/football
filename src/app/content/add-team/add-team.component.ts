@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services';
-import { POSITION, PositionSelect, RATINGS } from '../content.models';
+import { EventBusService } from 'src/app/services/event-bus.service';
+import {
+  FORM_RESET_EVENT_KEY,
+  POSITION,
+  PositionSelect,
+  RATINGS,
+} from '../content.models';
 import { Country } from '../models';
 import { Team, TeamBody } from '../models/team.models';
 import { AddTeamFacade } from './add-team.facade';
@@ -40,16 +46,24 @@ export class AddTeamComponent implements OnInit {
     return POSITION;
   }
 
+  private unsubscribe$ = new Subject();
+
   constructor(
     private facade: AddTeamFacade,
     private fb: FormBuilder,
     private translate: TranslateService,
     private auth: AuthService,
+    private eventBus: EventBusService
   ) {}
 
   ngOnInit() {
     this.facade.restoreState();
     this.buildForm();
+
+    this.eventBus
+      .on(FORM_RESET_EVENT_KEY)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(() => this.formReset());
   }
 
   onSearch() {
@@ -90,10 +104,8 @@ export class AddTeamComponent implements OnInit {
       rating: value.rating,
       isUCLWinner: value.isUCLWinner,
       coach: value.coach,
-      players: value.players
-    }
-
-    console.log(teamBody);
+      players: value.players,
+    };
 
     this.facade.submit(teamBody);
   }
@@ -115,6 +127,19 @@ export class AddTeamComponent implements OnInit {
         })*/
       ]),
     });
+  }
+
+  private formReset() {
+    this.form.reset();
+    this.form.updateValueAndValidity();
+
+    this.form.get('website')?.setValue('');
+    this.form.get('rating')?.setValue(1);
+    this.form.get('isUCLWinner')?.setValue(false);
+    this.form.get('coach')?.setValue('');
+    this.players.clear();
+
+    this.submitted = false;
   }
 
   addPlayerControl() {

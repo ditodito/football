@@ -30,3 +30,5 @@ export const POSITION: PositionSelect[] = [
     value: Position.FW,
   },
 ];
+
+export const FORM_RESET_EVENT_KEY = 'FORM_RESET';

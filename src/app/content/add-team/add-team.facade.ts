@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
 import { finalize, map, Observable, switchMap, tap } from 'rxjs';
 import { LoadingService } from 'src/app/services';
+import { EventBusService } from 'src/app/services/event-bus.service';
 import { FireApiService } from 'src/app/services/fire-api.service';
-import { CountryApi, TeamApiResponse, Team, TeamApi, TeamBody } from '../models';
+import { FORM_RESET_EVENT_KEY } from '../content.models';
+import {
+  CountryApi,
+  TeamApiResponse,
+  Team,
+  TeamApi,
+  TeamBody,
+} from '../models';
 import { TeamApiService, CountryApiService } from '../services';
 import { AddTeamStorage } from './add-team.storage';
 
@@ -10,7 +18,7 @@ import { AddTeamStorage } from './add-team.storage';
 export class AddTeamFacade {
   get searchedTeams(): string[] {
     return this.addTeamStorage.lastSearches;
-  };
+  }
 
   constructor(
     private teamApiService: TeamApiService,
@@ -18,6 +26,7 @@ export class AddTeamFacade {
     private fireApiService: FireApiService,
     private loaderService: LoadingService,
     private addTeamStorage: AddTeamStorage,
+    private eventBus: EventBusService
   ) {}
 
   private mapTeamWithCountry(team: TeamApiResponse, country: CountryApi): Team {
@@ -51,7 +60,12 @@ export class AddTeamFacade {
       // tap((team) => console.log('team 2', team)),
 
       switchMap((team) => {
-        const country = ['England', 'Scotland', 'Wales', 'Northern Ireland'].includes(team.team?.country)
+        const country = [
+          'England',
+          'Scotland',
+          'Wales',
+          'Northern Ireland',
+        ].includes(team.team?.country)
           ? 'United Kingdom'
           : team.team?.country;
 
@@ -59,12 +73,17 @@ export class AddTeamFacade {
           // tap((country) => console.log('country', country)),
           map<CountryApi[], CountryApi>((country) => country[0]),
           // tap((country) => console.log('country', country)),
-          map<CountryApi, Team>((country) => this.mapTeamWithCountry(team, country))
+          map<CountryApi, Team>((country) =>
+            this.mapTeamWithCountry(team, country)
+          )
         );
       }),
 
       // tap((team) => console.log('Team', team)),
-      finalize(() => this.loaderService.end())
+      finalize(() => {
+        this.loaderService.end();
+        this.eventBus.emit(FORM_RESET_EVENT_KEY);
+      })
     );
   }
 
@@ -77,6 +96,8 @@ export class AddTeamFacade {
   }
 
   submit(teamBody: TeamBody): void {
-    this.fireApiService.addTeam(teamBody).subscribe(data => console.log(data));
+    this.fireApiService
+      .addTeam(teamBody)
+      .subscribe((data) => console.log(data));
   }
 }
