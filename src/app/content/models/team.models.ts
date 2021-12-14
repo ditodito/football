@@ -51,3 +51,10 @@ export interface TeamBody {
     name: string;
   }[];
 }
+
+export type TeamBodyWithId = TeamBody & { id: string };
+
+export interface TeamListItem {
+  data: TeamBodyWithId;
+  team: Team;
+}

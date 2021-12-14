@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { finalize, map, Observable, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  finalize,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { LoadingService } from 'src/app/services';
 import { EventBusService } from 'src/app/services/event-bus.service';
 import { FireApiService } from 'src/app/services/fire-api.service';
@@ -77,6 +85,37 @@ export class AddTeamFacade {
             this.mapTeamWithCountry(team, country)
           )
         );
+      }),
+
+      catchError((d) => {
+        console.log('error', d);
+        throw 'dddd' + d;
+        /*return of(
+
+
+          {
+            id: 0,
+            name: '',
+            countryName: '',
+            cityName: '',
+            country: {
+              name: '',
+              population: 0,
+              flagUrl: ''
+            },
+            founded: 0,
+            logoUrl: '',
+            stadium: {
+              name: '',
+              capacity: '',
+              imageUrl: '',
+            }
+          }*/
+
+
+
+
+        //);
       }),
 
       // tap((team) => console.log('Team', team)),

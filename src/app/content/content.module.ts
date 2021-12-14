@@ -4,6 +4,8 @@ import { ContentRoutingModule } from './content-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { ContentComponent } from './content.component';
 import { AddTeamComponent } from './add-team/add-team.component';
+import { TeamListComponent } from './team-list/team-list.component';
+import { TeamListItemComponent } from './team-list/team-list-item/team-list-item.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor, CountryApiService, TeamApiService } from './services';
@@ -12,6 +14,8 @@ import { AuthInterceptor, CountryApiService, TeamApiService } from './services';
   declarations: [
     ContentComponent,
     AddTeamComponent,
+    TeamListComponent,
+    TeamListItemComponent,
   ],
   imports: [
     CommonModule,
@@ -22,9 +26,9 @@ import { AuthInterceptor, CountryApiService, TeamApiService } from './services';
     ReactiveFormsModule,
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     TeamApiService,
     CountryApiService,
-  ]
+  ],
 })
 export class ContentModule {}

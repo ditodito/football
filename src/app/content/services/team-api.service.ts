@@ -11,4 +11,8 @@ export class TeamApiService {
   getTeamByName(team: string): Observable<TeamApi> {
     return this.http.get<TeamApi>(`${environment.footballAPI}/teams?name=${team}`);
   }
+
+  getTeamById(teamId: number): Observable<TeamApi> {
+    return this.http.get<TeamApi>(`${environment.footballAPI}/teams?id=${teamId}`);
+  }
 }
