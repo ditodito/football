@@ -22,7 +22,7 @@
 </div>
 
 <div class="container" *ngIf="selectedTeam$ | async as team">
-  <div class="row mb-5">
+  <div class="row">
     <div class="col-sm-3 mb-2">
       <img
         class="img-fluid img-thumbnail"
@@ -33,11 +33,11 @@
     </div>
     <div class="col-sm-9 mb-2">
       <h1 class="fw-light">{{ team.name }}</h1>
-      <div>
+      <div class="mb-1">
         <span class="fw-bold">{{ "team.FOUNDED" | translate }}</span
         >: {{ team.founded }}
       </div>
-      <div>
+      <div class="mb-1">
         <span class="fw-bold">{{ "team.COUNTRY" | translate }}</span
         >:
         <img
@@ -48,13 +48,13 @@
           height="21" />
         {{ team.countryName }}
       </div>
-      <div>
+      <div class="mb-1">
         <span class="fw-bold">{{ "team.CITY" | translate }}</span>: {{ team.cityName }}
       </div>
-      <div>
+      <div class="mb-1">
         <span class="fw-bold">{{ "team.STADIUM" | translate }}</span>: {{ team.stadium.name }}
       </div>
-      <div>
+      <div class="mb-1">
         <span class="fw-bold">{{ "team.CAPACITY" | translate }}</span>: {{ team.stadium.capacity | number: "2." }}
       </div>
     </div>

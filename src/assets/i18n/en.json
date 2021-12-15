@@ -1,6 +1,7 @@
 {
   "404": "Page Not Found",
   "population": "Population of {{country}} is {{population}}",
+  "back": "Go Back",
   "auth": {
     "SIGN_UP": "Sign Up",
     "SIGN_IN": "Sign In",
@@ -35,10 +36,13 @@
     "SELECT": "Select",
     "SEARCH": "Search",
     "ADD": "ADD",
+    "ADD_TEAM": "Add Team",
     "DETAILS": "Details",
-    "GK": "Goalkeeper",
-    "DF": "Defender",
-    "MF": "Midfielder",
-    "FW": "Forward"
+    "Goalkeeper": "Goalkeeper",
+    "Defender": "Defender",
+    "Midfielder": "Midfielder",
+    "Forward": "Forward",
+    "POSITION": "Position",
+    "NAME": "Name"
   }
 }

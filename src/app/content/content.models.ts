@@ -14,19 +14,19 @@ export interface PositionSelect {
 
 export const POSITION: PositionSelect[] = [
   {
-    label: 'catalogue.GK',
+    label: 'catalogue.Goalkeeper',
     value: Position.GK,
   },
   {
-    label: 'catalogue.DF',
+    label: 'catalogue.Defender',
     value: Position.DF,
   },
   {
-    label: 'catalogue.MF',
+    label: 'catalogue.Midfielder',
     value: Position.MF,
   },
   {
-    label: 'catalogue.FW',
+    label: 'catalogue.Forward',
     value: Position.FW,
   },
 ];

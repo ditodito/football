@@ -4,7 +4,15 @@
       <img [src]="team.team.logoUrl" [alt]="team.team.name" [title]="team.team.name" />
     </div>
     <div class="card-body">
-      <p class="h4">{{ team.team.name }}</p>
+      <p class="h4">
+        {{ team.team.name }}
+        <img
+          [src]="team.team.country.flagUrl"
+          [title]="team.team.country.name"
+          [alt]="team.team.country.name"
+          width="28"
+          height="21" />
+      </p>
       <p class="card-text">
         {{ team.data.coach }}
       </p>
