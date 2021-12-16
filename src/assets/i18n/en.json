@@ -36,6 +36,7 @@
     "SELECT": "Select",
     "SEARCH": "Search",
     "ADD": "ADD",
+    "DELETE": "Delete",
     "ADD_TEAM": "Add Team",
     "DETAILS": "Details",
     "Goalkeeper": "Goalkeeper",

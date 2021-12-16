@@ -1,10 +1,11 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, Observable, tap } from 'rxjs';
 import { LoadingService } from 'src/app/services';
 import { FireApiService } from 'src/app/services/fire-api.service';
 import { ContentFacade } from '../content.facade';
-import { Team, TeamBody } from '../models';
+import { Team, TeamBody, TeamBodyWithId } from '../models';
 
 @Component({
   selector: 'app-team-details',
@@ -14,6 +15,7 @@ import { Team, TeamBody } from '../models';
 export class TeamDetailsComponent implements OnInit {
   data$: Observable<TeamBody | undefined> | undefined;
   team$: Observable<Team> | undefined;
+  id: string = '';
 
   constructor(
     private activatedRout: ActivatedRoute,
@@ -28,11 +30,11 @@ export class TeamDetailsComponent implements OnInit {
   }
 
   intitTeamDetails() {
-    const id = this.activatedRout.snapshot.params['id'];
+    this.id = this.activatedRout.snapshot.params['id'];
 
     this.loadingService.start();
 
-    this.data$ = this.fireApiService.getTeam(id).pipe(
+    this.data$ = this.fireApiService.getTeam(this.id).pipe(
       tap((storeData) => {
         if (storeData) {
           this.team$ = this.contentFacade
@@ -45,5 +47,14 @@ export class TeamDetailsComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['content']);
+  }
+
+  deleteTeam() {
+    this.loadingService.start();
+
+    this.fireApiService
+      .deleteTeam(this.id)
+      .pipe(finalize(() => this.loadingService.end()))
+      .subscribe(() => this.goBack());
   }
 }

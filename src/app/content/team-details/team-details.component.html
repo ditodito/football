@@ -1,7 +1,7 @@
 <div class="container my-5">
   <ng-container *ngIf="team$ | async as team">
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-3 mb-2">
         <img
           class="img-fluid img-thumbnail"
           [src]="team.logoUrl"
@@ -97,6 +97,16 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3 mb-2">
+
+      </div>
+      <div class="col-sm-9 mb-2">
+        <button type="button" class="btn btn-sm btn-danger" (click)="deleteTeam()">
+          {{ "catalogue.DELETE" | translate }}
+        </button>
       </div>
     </div>
   </ng-container>

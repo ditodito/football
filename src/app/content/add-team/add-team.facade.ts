@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { finalize, Observable } from 'rxjs';
 import { LoadingService } from 'src/app/services';
 import { EventBusService } from 'src/app/services/event-bus.service';
@@ -19,7 +20,8 @@ export class AddTeamFacade {
     private addTeamStorage: AddTeamStorage,
     private contentFacade: ContentFacade,
     private loaderService: LoadingService,
-    private eventBus: EventBusService
+    private eventBus: EventBusService,
+    private router: Router
   ) {}
 
   getTeamByName(teamName: string): Observable<Team> {
@@ -42,8 +44,8 @@ export class AddTeamFacade {
   }
 
   submit(teamBody: TeamBody): void {
-    this.fireApiService
-      .addTeam(teamBody)
-      .subscribe((data) => console.log(data));
+    this.fireApiService.addTeam(teamBody).subscribe(() => {
+      this.router.navigate(['content']);
+    });
   }
 }

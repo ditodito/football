@@ -3,7 +3,7 @@ import {
   AngularFirestore,
   QuerySnapshot,
 } from '@angular/fire/compat/firestore';
-import { from, map, Observable } from 'rxjs';
+import { from, map, Observable, tap } from 'rxjs';
 import { AuthService } from '.';
 import { TeamBody, TeamBodyWithId } from '../content/models';
 
@@ -38,5 +38,16 @@ export class FireApiService {
       .doc(id)
       .get()
       .pipe(map((team) => team.data()));
+  }
+
+  deleteTeam(id: string): Observable<void> {
+    return from(
+      this.store
+        .collection<TeamBody>('teams', (ref) =>
+          ref.where('uid', '==', this.auth.userId)
+        )
+        .doc(id)
+        .delete()
+    );
   }
 }
