@@ -2,6 +2,8 @@
   "404": "Page Not Found",
   "population": "Population of {{country}} is {{population}}",
   "back": "Go Back",
+  "team_catalogue": "Teams Catalogue",
+  "add_team_with_players": "Add teams with team players",
   "auth": {
     "SIGN_UP": "Sign Up",
     "SIGN_IN": "Sign In",
@@ -16,7 +18,8 @@
     "PASSWORD_REPEAT": "Repeate Password is required",
     "EMAIL_VALID": "Email must be a valid email address",
     "PASSWORD_LENGTH": "Password must be at least 6 characters",
-    "PASSWORD_MATCH": "Passwords must match"
+    "PASSWORD_MATCH": "Passwords must match",
+    "DATA_NOT_FOUND": "Data Not Found"
   },
   "team": {
     "FOUNDED": "Founded",

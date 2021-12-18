@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, switchMap } from 'rxjs';
+import { async } from '@firebase/util';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, EMPTY, map, Observable, of, switchMap, tap } from 'rxjs';
 import { CountryApi, Team, TeamApi, TeamApiResponse } from './models';
 import { CountryApiService, TeamApiService } from './services';
 
@@ -7,7 +10,8 @@ import { CountryApiService, TeamApiService } from './services';
 export class ContentFacade {
   constructor(
     private teamApiService: TeamApiService,
-    private countryApiService: CountryApiService
+    private countryApiService: CountryApiService,
+    private toastr: ToastrService
   ) {}
 
   private convertCountryToGB(country: string): string {
@@ -42,7 +46,12 @@ export class ContentFacade {
 
   getTeamByName(teamName: string): Observable<Team> {
     return this.teamApiService.getTeamByName(teamName).pipe(
-      // tap((team) => console.log('team 1', team)),
+      tap((team) => {
+        if (!team.results) {
+          throw Error('Data Not Found');
+        }
+      }),
+
       map<TeamApi, TeamApiResponse>((team) => team.response[0]),
 
       switchMap((team) => {
@@ -54,13 +63,20 @@ export class ContentFacade {
             this.mapTeamWithCountry(team, country[0])
           )
         );
-      })
+      }),
+
+      catchError((error) => this.catchError(error))
     );
   }
 
   getTeamById(id: number): Observable<Team> {
     return this.teamApiService.getTeamById(id).pipe(
-      // tap((team) => console.log('team 1', team)),
+      tap((team) => {
+        if (!team.results) {
+          throw Error('Data Not Found');
+        }
+      }),
+
       map<TeamApi, TeamApiResponse>((team) => team.response[0]),
 
       switchMap((team) => {
@@ -72,7 +88,17 @@ export class ContentFacade {
             this.mapTeamWithCountry(team, country[0])
           )
         );
-      })
+      }),
+
+      catchError((error) => this.catchError(error))
     );
+  }
+
+  catchError(error: string) {
+    this.toastr.error(error, '', {
+      positionClass: 'toast-top-center',
+    });
+
+    return EMPTY;
   }
 }

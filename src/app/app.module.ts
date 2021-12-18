@@ -11,6 +11,8 @@ import { Langs } from './model/Enums';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
 import { SharedModule } from './shared/shared.module';
+import { ToastNoAnimationModule, ToastrModule } from 'ngx-toastr';
+
 // import { provideAnalytics,getAnalytics,ScreenTrackingService,UserTrackingService } from '@angular/fire/analytics';
 // import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 // import { provideAuth,getAuth } from '@angular/fire/auth';
@@ -54,6 +56,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     // providePerformance(() => getPerformance()),
     // provideRemoteConfig(() => getRemoteConfig()),
     // provideStorage(() => getStorage()),
+    //BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(),
+    ToastNoAnimationModule.forRoot(),
   ],
   providers: [
     // ScreenTrackingService,

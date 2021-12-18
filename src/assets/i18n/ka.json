@@ -2,6 +2,8 @@
   "404": "გვერდი ვერ მოიძებნა",
   "population": "{{country}} მოსახლეობა არის {{population}}",
   "back": "უკან",
+  "team_catalogue": "გუნდების კატალოგი",
+  "add_team_with_players": "დაამატე გუნდები ფეხბურთელებით",
   "auth": {
     "SIGN_UP": "რეგისტრაცია",
     "SIGN_IN": "შესვლა",
@@ -16,7 +18,8 @@
     "PASSWORD_REPEAT": "გაიმეორე პაროლი სავალდებულოა",
     "EMAIL_VALID": "მიუთითე სწორი ელ. ფოსტა",
     "PASSWORD_LENGTH": "პაროლი უნდა შეიცავდეს მინ. 6 სიმბოლოს",
-    "PASSWORD_MATCH": "პაროლები უნდა ემთხვეოდეს"
+    "PASSWORD_MATCH": "პაროლები უნდა ემთხვეოდეს",
+    "DATA_NOT_FOUND": "Data Not Found"
   },
   "team": {
     "FOUNDED": "დაარსების წელი",

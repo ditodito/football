@@ -2,6 +2,7 @@ import { Country } from '.';
 
 export interface TeamApi {
   response: TeamApiResponse[];
+  results: number;
 }
 
 export interface TeamApiResponse {
